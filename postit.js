@@ -534,6 +534,10 @@ function saveEditor() {
   if (!S.ed || !S.ed.dirty || !S.uid) return;
   const { id } = S.ed;
   const m = readEditor();
+  // gli a capo in fondo (la tastiera del telefono ne lascia spesso uno) non si salvano
+  const keep = m.text.replace(/\s+$/, "").length;
+  m.text = m.text.slice(0, keep);
+  m.st = m.st.slice(0, keep);
   const exists = !!S.notes[id];
   if (!exists && !m.text.trim()) return; // un post-it nuovo vuoto non si crea
   const tags = tagsFrom(m.text, m.st);
