@@ -220,7 +220,7 @@ function pushWidget() {
   if (!widget() || !S.uid) return;
   clearTimeout(widgetTimer);
   widgetTimer = setTimeout(() => {
-    const notes = sortedNotes().slice(0, 25).map((n) => ({
+    const notes = sortedNotes().slice(0, 60).map((n) => ({
       id: n.id, text: typeof n.text === "string" ? n.text : "", color: n.color, updated: Number(n.updated) || 0,
     }));
     widget().update({
@@ -239,7 +239,7 @@ function openFromWidget(req) {
   closeSheets();
   if (req.nuovo) {
     const id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()).replace(/[^a-z0-9]/gi, "");
-    openEditor(id, S.filter ?? 0);
+    openEditor(id, Number.isInteger(req.colore) ? req.colore : (S.filter ?? 0));
   } else if (req.nota && S.notes[req.nota]) {
     openEditor(req.nota);
   } else {
