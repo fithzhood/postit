@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="theme-color" content="#1b1814">
+<title>Post-it</title>
+<link rel="icon" href="postit-icona.png?v=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap">
+<link rel="stylesheet" href="postit.css?v=1">
+</head>
+<body>
+
+<!-- ======== ACCESSO ======== -->
+<section id="accesso" class="schermo" hidden>
+  <form id="formAccesso" class="accesso" autocomplete="on">
+    <h1 class="marchio">Post-it</h1>
+    <p class="occhiello">Accedi con lo stesso account del PC: i post-it arrivano da lì.</p>
+    <label>Email
+      <input id="email" type="email" autocomplete="username" inputmode="email" required>
+    </label>
+    <label>Password
+      <input id="password" type="password" autocomplete="current-password" required>
+    </label>
+    <p id="erroreAccesso" class="errore" role="alert"></p>
+    <button id="btnAccedi" class="primario" type="submit">Accedi</button>
+  </form>
+</section>
+
+<!-- ======== LISTA ======== -->
+<section id="lista" class="schermo" hidden>
+  <header class="testata">
+    <h1 class="marchio">Post-it</h1>
+    <span id="pallino" class="pallino" title="Collegamento"></span>
+    <button id="btnMenu" class="icona" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+    </button>
+  </header>
+  <nav id="filtri" class="filtri" aria-label="Filtra per tema"></nav>
+  <main id="griglia" class="griglia"></main>
+  <p id="vuoto" class="vuoto" hidden></p>
+  <button id="btnNuovo" class="fab" aria-label="Nuovo post-it">
+    <svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16"/></svg>
+  </button>
+</section>
+
+<!-- ======== EDITOR ======== -->
+<section id="editorSchermo" class="schermo editor-schermo" hidden>
+  <header class="testata-editor">
+    <button id="btnIndietro" class="icona" aria-label="Indietro">
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <span id="temaEditor" class="tema-editor"></span>
+    <button id="btnColore" class="icona" aria-label="Colore del post-it">
+      <svg viewBox="0 0 24 24" class="tavolozza"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+    </button>
+    <button id="btnElimina" class="icona" aria-label="Elimina il post-it">
+      <svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg>
+    </button>
+  </header>
+  <div id="editor" class="editor" contenteditable="true" spellcheck="true" autocapitalize="sentences"
+       role="textbox" aria-multiline="true" aria-label="Testo del post-it"></div>
+  <div id="conferma" class="conferma" hidden>
+    <p>Eliminare questo post-it?</p>
+    <div class="conferma-tasti">
+      <button id="btnAnnullaElimina" class="secondario">Annulla</button>
+      <button id="btnConfermaElimina" class="pericolo">Elimina</button>
+    </div>
+  </div>
+  <div id="formato" class="formato" role="toolbar" aria-label="Formattazione">
+    <button data-f="b" class="f-b" aria-label="Grassetto">G</button>
+    <button data-f="i" class="f-i" aria-label="Corsivo">C</button>
+    <button data-f="u" class="f-u" aria-label="Sottolineato">S</button>
+    <button data-f="s" class="f-s" aria-label="Barrato">ab</button>
+    <span class="sep"></span>
+    <div id="inchiostri" class="inchiostri" role="group" aria-label="Colore del testo"></div>
+  </div>
+</section>
+
+<!-- ======== FOGLI A SCOMPARSA ======== -->
+<div id="velo" class="velo" hidden></div>
+<div id="foglioColori" class="foglio" hidden>
+  <p class="foglio-titolo">Colore del post-it</p>
+  <div id="colori" class="colori"></div>
+</div>
+<div id="foglioMenu" class="foglio" hidden>
+  <p id="menuAccount" class="foglio-titolo"></p>
+  <button id="btnEsci" class="voce">Esci dall'account</button>
+</div>
+
+<script type="module" src="postit.js?v=1"></script>
+</body>
+</html>
