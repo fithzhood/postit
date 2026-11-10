@@ -168,6 +168,8 @@ onAuthStateChanged(auth, (user) => {
   S.unsub = [];
   if (!user) {
     S.uid = null;
+    delete window.__postitApri;
+    widget()?.clear().catch(() => {});
     show("accesso");
     return;
   }
@@ -177,6 +179,8 @@ onAuthStateChanged(auth, (user) => {
   loadCache();
   show("lista");
   renderList();
+  pushWidget();
+  window.__postitApri = openFromWidget;
   S.unsub.push(onValue(ref(db, `users/${S.uid}`), (snap) => {
     const v = snap.val() || {};
     S.notes = v.notes && typeof v.notes === "object" ? v.notes : {};
@@ -205,6 +209,43 @@ function loadCache() {
 }
 function saveCache() {
   try { localStorage.setItem(cacheKey(), JSON.stringify({ notes: S.notes, themes: S.themes })); } catch { /* pieno */ }
+  pushWidget();
+}
+
+// ---------------------------------------------------------------------------
+// Widget della schermata Home (solo nell'APK)
+const widget = () => window.Capacitor?.Plugins?.PostitWidget;
+let widgetTimer = null;
+function pushWidget() {
+  if (!widget() || !S.uid) return;
+  clearTimeout(widgetTimer);
+  widgetTimer = setTimeout(() => {
+    const notes = sortedNotes().slice(0, 25).map((n) => ({
+      id: n.id, text: typeof n.text === "string" ? n.text : "", color: n.color, updated: Number(n.updated) || 0,
+    }));
+    widget().update({
+      notes: JSON.stringify(notes),
+      themes: JSON.stringify(S.themes),
+      uid: S.uid,
+      refreshToken: auth.currentUser?.refreshToken || "",
+    }).catch(() => { /* il widget non è essenziale */ });
+  }, 300);
+}
+
+/** Tocchi sul widget: aprire un post-it, o scriverne uno nuovo. */
+function openFromWidget(req) {
+  if (!S.uid || !req) return;
+  if (S.ed) { saveEditor(); S.ed = null; }
+  closeSheets();
+  if (req.nuovo) {
+    const id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()).replace(/[^a-z0-9]/gi, "");
+    openEditor(id, S.filter ?? 0);
+  } else if (req.nota && S.notes[req.nota]) {
+    openEditor(req.nota);
+  } else {
+    show("lista");
+    renderList();
+  }
 }
 
 function show(id) {
